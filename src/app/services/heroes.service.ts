@@ -31,14 +31,26 @@ export class HeroesService {
 
     delete heroeTemp.id;
 
-    return this.http.put(`${this.url}/heroes/${heroe.id}.json`, heroeTemp);
+    return this.http.put(`${ this.url }/heroes/${ heroe.id }.json`, heroeTemp);
   }
 
   getHeroes(){
-    return this.http.get(`${this.url}/heroes.json`)
+    return this.http.get(`${ this.url }/heroes.json`)
                     .pipe(
                       map( this.crearArreglo )
                     );
+  }
+
+  getHeroe( id: string ){
+
+    return this.http.get(`${ this.url }/heroes/${ id }.json`);
+
+  }
+
+  borrarHeroe( id: string ){
+
+    return this.http.delete(`${ this.url }/heroes/${ id }.json`);
+
   }
 
   private crearArreglo( heroesObj: object ){

@@ -2,6 +2,7 @@ import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { HeroeModel } from 'src/app/models/heroe.model';
 import { HeroesService } from 'src/app/services/heroes.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-heroes',
@@ -10,18 +11,35 @@ import { HeroesService } from 'src/app/services/heroes.service';
 })
 export class HeroesComponent implements OnInit {
 
-  private heroes: HeroeModel[];
-  private cargando: boolean = false;
+  heroes: HeroeModel[];
+  
   constructor( private heroesServices: HeroesService ) { }
 
   ngOnInit(): void {
-    this.cargando = true;
+
     this.heroesServices.getHeroes()
         .subscribe( res => {
           this.heroes = res;
-          this.cargando = false;
         });
 
+  }
+
+  borrarHeroe( heroe: HeroeModel, i: number ){
+
+    Swal.fire({
+      title: 'Esta seguro?',
+      text: `Esta seguro que desea borrar a ${ heroe.nombre }?`,
+      icon: 'question',
+      showConfirmButton: true,
+      showCancelButton: true
+    }).then( res => {
+
+      if( res.value ){
+        this.heroes.splice(i, 1);
+        this.heroesServices.borrarHeroe(heroe.id).subscribe();
+      }
+    })
+    
   }
 
 }
