@@ -1,4 +1,3 @@
-import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { HeroeModel } from 'src/app/models/heroe.model';
 import { HeroesService } from 'src/app/services/heroes.service';
@@ -11,17 +10,19 @@ import Swal from 'sweetalert2';
 })
 export class HeroesComponent implements OnInit {
 
-  heroes: HeroeModel[];
+  heroes: HeroeModel[] = [];
+  cargando: boolean = false;
   
   constructor( private heroesServices: HeroesService ) { }
 
   ngOnInit(): void {
-
+    this.cargando = true;
     this.heroesServices.getHeroes()
         .subscribe( res => {
           this.heroes = res;
+          this.cargando = false;
         });
-
+        
   }
 
   borrarHeroe( heroe: HeroeModel, i: number ){
